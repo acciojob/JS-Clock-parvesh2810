@@ -1,39 +1,38 @@
-//your code here
-// gets clock hands and puts them into constants
-const HOURHAND = document.querySelector(".hour-hand");
-const MINUTEHAND = document.querySelector(".min-hand");
-const SECONDHAND = document.querySelector(".second-hand");
+// grab a reference of every hands
 
-// gets the current time and adds hours / mins / secs to individual let varriables
-var date = new Date();
-let hr = date.getHours();
-let min = date.getMinutes();
-let sec = date.getSeconds();
+// hour hand
+let hourHand = document.querySelector('.hour-hand');
+// minute hand 
+let minuteHand = document.querySelector('.min-hand');
+// second hand
+let secondHand = document.querySelector('.second-hand');
 
-// converts current time into degrees of the 360 degree clock
-// the calculation on hr & min incriments the clock smootly instead of jumping from minuite to minuite or hour to hour it is  percentages of a minuite / hour respectivly
-let hrPosition = (hr*360/12)+(min*(360/60)/12);
-let minPosition = (min*360/60)+(sec*(360/60)/60);
-let secPosition = sec*360/60;
+// function that rotates the hands
+function rotate() {
+  // get the current Date object from which we can obtain the current hour, minute and second
+  const currentDate = new Date();
 
-// function that sets clock to current time and adds a second to it every time it is called
-function runClock(){
-  
-  // adds degrees in an hour divide by seconds in an hour to previous time
-  hrPosition += (30/3600);
-  
-  // adds degrees in a minuite divide by seconds in an minuite to previous time
-  minPosition += (6/60);
-  
-  // adds degrees in a second to previous time
-  secPosition += 6;
-   
-  // position clock hands to degrees values calculated above using transfrom rotate
-  HOURHAND.style.transform = "rotate(" + hrPosition + "deg)";
-  MINUTEHAND.style.transform = "rotate(" + minPosition + "deg)";
-  SECONDHAND.style.transform = "rotate(" + secPosition + "deg)";
-  
+  // get the hours, minutes and seconds
+  const hours = currentDate.getHours();
+  const minutes = currentDate.getMinutes();
+  const seconds = currentDate.getSeconds();
+
+  // rotating fraction --> how many fraction to rotate for each hand.
+  const secondsFraction = seconds / 60;
+  const minutesFraction = (secondsFraction + minutes) / 60;
+  const hoursFraction = (minutesFraction + hours) / 12;
+
+  // actual deg to rotate
+  const secondsRotate = secondsFraction * 360;
+  const minutesRotate = minutesFraction * 360;
+  const hoursRotate = hoursFraction * 360;
+
+  // apply the rotate style to each element
+  // use backtick `` instead of single quotes ''
+  secondHand.style.transform = `rotate(${secondsRotate}deg)`;
+  minuteHand.style.transform = `rotate(${minutesRotate}deg)`;
+  hourHand.style.transform = `rotate(${hoursRotate}deg)`;
 }
 
-// intival that automates the clock by calling the runClock function every second
-var interval = setInterval(runClock, 1000);
+// for every 1000 milliseconds(ie, 1 second) interval, activate the rotate() function.
+setInterval(rotate, 1000);
