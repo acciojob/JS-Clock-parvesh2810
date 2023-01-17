@@ -1,0 +1,4 @@
+{
+    "testRepo": "JS-Clock-Solution",
+    "pathToFile": "cypress/integration/tests/test.spec.js"
+}
